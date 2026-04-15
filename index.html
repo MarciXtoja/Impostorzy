@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Impostor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0d0d1a" />
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0d0d1a" />
 
-  <!-- iOS PWA -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Impostor" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Impostor" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
 
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- SETUP -->
+     <!-- SETUP -->
   <div class="screen active" id="screen-setup">
     <h1>🕵️ Impostor</h1>
     <p style="margin-bottom:24px">Gra towarzyska na hasła</p>
@@ -30,17 +30,6 @@
       </div>
 
       <div class="players-list" id="players-list"></div>
-
-      <label>Kategoria</label>
-      <select id="category-select">
-        <option value="random">🎲 Losowa</option>
-        <option value="jedzenie">🍕 Jedzenie</option>
-        <option value="zwierzeta">🐾 Zwierzęta</option>
-        <option value="miejsca">🌍 Miejsca</option>
-        <option value="sport">⚽ Sport</option>
-        <option value="filmy">🎬 Filmy i seriale</option>
-        <option value="przedmioty">📦 Przedmioty</option>
-      </select>
 
       <label>Liczba impostorów</label>
       <input type="number" id="impostor-count" value="1" min="1" max="2" />
@@ -74,7 +63,6 @@
   <div class="screen" id="screen-role">
     <div class="big-role" id="role-emoji"></div>
     <div class="role-label" id="role-label"></div>
-    <div class="category-badge" id="role-category"></div>
     <div class="word-box word-hidden" id="role-word" onclick="revealWord(this)">Dotknij aby zobaczyć</div>
     <p style="font-size:0.8rem;margin-bottom:20px;padding:0 16px" id="role-hint"></p>
     <button class="btn btn-primary" onclick="nextTurn()">DALEJ →</button>
@@ -125,9 +113,6 @@
     <div class="card" style="text-align:center;max-width:420px">
       <div id="result-voted"></div>
       <hr class="divider"/>
-      <div id="result-impostors"></div>
-      <hr class="divider"/>
-      <div id="result-words"></div>
     </div>
 
     <div id="guess-section" style="display:none;width:100%;max-width:420px">

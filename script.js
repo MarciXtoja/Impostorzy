@@ -1,17 +1,59 @@
 const WORDS = {
-  jedzenie: [['Pizza','Hamburger'],['Lody','Sorbet'],['Sushi','Pierogi'],['Kawa','Herbata'],['Czekolada','Karmel'],['Banan','Mango'],['Frytki','Chipsy'],['Zapiekanka','Hot dog']],
-  zwierzeta: [['Pies','Wilk'],['Kot','Ryś'],['Słoń','Nosorożec'],['Żyrafa','Wielbłąd'],['Pingwin','Puffin'],['Delfin','Morświn'],['Orzeł','Sokół'],['Królik','Zając']],
-  miejsca: [['Plaża','Wydma'],['Zamek','Pałac'],['Las','Dżungla'],['Góry','Wulkan'],['Biblioteka','Archiwum'],['Stadion','Arena'],['Lotnisko','Dworzec'],['Rynek','Plac']],
-  sport: [['Piłka nożna','Rugby'],['Koszykówka','Siatkówka'],['Tenis','Badminton'],['Pływanie','Nurkowanie'],['Narciarstwo','Snowboard'],['Boks','Karate'],['Golf','Krykiet'],['Kolarstwo','Triathlon']],
-  filmy: [['Titanic','Rejs'],['Matrix','Inception'],['Avatar','Dune'],['Harry Potter','Percy Jackson'],['Shrek','Kung Fu Panda'],['Star Wars','Star Trek'],['Hobbit','Eragon'],['Interstellar','Gravity']],
-  przedmioty: [['Telefon','Tablet'],['Samochód','Motocykl'],['Gitara','Skrzypce'],['Zegarek','Kompas'],['Lampa','Świecznik'],['Klucz','Śrubokręt'],['Parasol','Płaszcz'],['Piłka','Balon']]
+  all: [
+    {innocent: 'Pizza', impostor: ['Okrągłe', 'ciasto', 'ser', 'sos']},
+    {innocent: 'Hamburger', impostor: ['Chleb', 'mięso', 'kotlet']},
+    {innocent: 'Lody', impostor: ['Mrożone', 'słodkie', 'łyżka']},
+    {innocent: 'Sushi', impostor: ['Ryż', 'ryba', 'wodorosty']},
+    {innocent: 'Kawa', impostor: ['Gorąca', 'napój', 'kofeina']},
+    {innocent: 'Czekolada', impostor: ['Słodka', 'kakao', 'brąz']},
+    {innocent: 'Frytki', impostor: ['Smażone', 'ziemniaki', 'paski']},
+    {innocent: 'Zapiekanka', impostor: ['Baguette', 'ser', 'sos']},
+    {innocent: 'Pies', impostor: ['Czworonóg', 'ogon', 'szczekanie']},
+    {innocent: 'Kot', impostor: ['Czworonóg', 'miauczenie', 'niezależny']},
+    {innocent: 'Słoń', impostor: ['Szary', 'trąba', 'gigant']},
+    {innocent: 'Żyrafa', impostor: ['Wysoka', 'szyja', 'plamy']},
+    {innocent: 'Pingwin', impostor: ['Czarno-biały', 'ptak', 'lód']},
+    {innocent: 'Delfin', impostor: ['Morski', 'inteligentny', 'dziób']},
+    {innocent: 'Orzeł', impostor: ['Ptak', 'szpony', 'latanie']},
+    {innocent: 'Królik', impostor: ['Futrzak', 'uszy', 'skok']},
+    {innocent: 'Plaża', impostor: ['Piasek', 'morze', 'słoneczko']},
+    {innocent: 'Zamek', impostor: ['Mury', 'wieże', 'fortyfikacja']},
+    {innocent: 'Las', impostor: ['Drzewa', 'gęsty', 'zielony']},
+    {innocent: 'Góry', impostor: ['Wysokie', 'szczyty', 'wspinaczka']},
+    {innocent: 'Biblioteka', impostor: ['Książki', 'publiczna', 'cicho']},
+    {innocent: 'Stadion', impostor: ['Duża', 'arena', 'sport']},
+    {innocent: 'Lotnisko', impostor: ['Samoloty', 'terminal', 'pasażerowie']},
+    {innocent: 'Rynek', impostor: ['Handlowe', 'straganki', 'ludzie']},
+    {innocent: 'Piłka nożna', impostor: ['Piłka', 'drużyny', 'bramka', 'kopanie']},
+    {innocent: 'Koszykówka', impostor: ['Piłka', 'koszyk', 'odbijanie']},
+    {innocent: 'Tenis', impostor: ['Rakieta', 'piłka', 'kort', 'siatka']},
+    {innocent: 'Pływanie', impostor: ['Woda', 'ruch', 'sport']},
+    {innocent: 'Narciarstwo', impostor: ['Śnieg', 'narty', 'zjazd']},
+    {innocent: 'Boks', impostor: ['Pięści', 'ring', 'walka']},
+    {innocent: 'Golf', impostor: ['Piłka', 'dziura', 'pas']},
+    {innocent: 'Kolarstwo', impostor: ['Rower', 'jazda', 'trasa']},
+    {innocent: 'Titanic', impostor: ['Statek', 'lód', 'tonięcie']},
+    {innocent: 'Matrix', impostor: ['Maszyny', 'sztuczny', 'świat']},
+    {innocent: 'Avatar', impostor: ['Niebieski', 'humanoidy', 'planeta']},
+    {innocent: 'Harry Potter', impostor: ['Czarodziej', 'mały', 'zło']},
+    {innocent: 'Shrek', impostor: ['Ogr', 'zielony', 'księżniczka']},
+    {innocent: 'Star Wars', impostor: ['Miecze', 'świetlne', 'epoka']},
+    {innocent: 'Hobbit', impostor: ['Mały', 'pierścień', 'zagubiony']},
+    {innocent: 'Interstellar', impostor: ['Czarna', 'dziura', 'gwiazdy']},
+    {innocent: 'Telefon', impostor: ['Rozmowy', 'wiadomości', 'ekran']},
+    {innocent: 'Samochód', impostor: ['Pojazd', 'koła', 'silnik']},
+    {innocent: 'Gitara', impostor: ['Instrument', 'struny', 'muzyka']},
+    {innocent: 'Zegarek', impostor: ['Czas', 'noszony', 'nadgarstek']},
+    {innocent: 'Lampa', impostor: ['Oświetlenie', 'elektryczna', 'pokój']},
+    {innocent: 'Klucz', impostor: ['Metal', 'drzwi', 'otwarcie']},
+    {innocent: 'Parasol', impostor: ['Deszcz', 'ochrona', 'składany']},
+    {innocent: 'Piłka', impostor: ['Okrągła', 'zabawa', 'sport']}
+  ]
 };
-const CATEGORIES = Object.keys(WORDS);
-const CAT_NAMES = {jedzenie:'🍕 Jedzenie',zwierzeta:'🐾 Zwierzęta',miejsca:'🌍 Miejsca',sport:'⚽ Sport',filmy:'🎬 Filmy',przedmioty:'📦 Przedmioty'};
 
-let players=[], impostorIndices=[], normalWord='', impostorWord='', category='';
+let players=[], impostorIndices=[], normalWord='', impostorWords={}, category='';
 let currentTurn=0, playerOrder=[], voteMap={}, voterIndex=0, timerInterval=null;
-let selectedMinutes=5, kickedPlayer=null;
+let selectedMinutes=5, kickedPlayer=null, eliminatedPlayers=[];
 
 function selectTime(min) {
   selectedMinutes = min;
@@ -41,15 +83,27 @@ function removePlayer(i) { players.splice(i,1); renderPlayers(); }
 function startGame() {
   if (players.length < 3) { alert('Dodaj co najmniej 3 graczy!'); return; }
   const impostorCount = Math.min(parseInt(document.getElementById('impostor-count').value)||1, Math.floor(players.length/2));
-  let cat = document.getElementById('category-select').value;
-  if (cat==='random') cat = CATEGORIES[Math.floor(Math.random()*CATEGORIES.length)];
-  category = cat;
-  const pair = WORDS[cat][Math.floor(Math.random()*WORDS[cat].length)];
-  const flip = Math.random()<0.5;
-  normalWord = flip ? pair[0] : pair[1];
-  impostorWord = flip ? pair[1] : pair[0];
-  const shuffled = players.map((_,i)=>i).sort(()=>Math.random()-0.5);
-  impostorIndices = shuffled.slice(0, impostorCount);
+  const pair = WORDS.all[Math.floor(Math.random()*WORDS.all.length)];
+  normalWord = pair.innocent;
+  
+  // Fisher-Yates shuffle for truly random impostor selection
+  const indices = [...Array(players.length).keys()];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  impostorIndices = indices.slice(0, impostorCount);
+  
+  // Assign each impostor a different random word from the impostor array
+  impostorWords = {};
+  const impostorWordPool = [...pair.impostor];
+  impostorIndices.forEach(idx => {
+    const randomIdx = Math.floor(Math.random() * impostorWordPool.length);
+    impostorWords[idx] = impostorWordPool[randomIdx];
+    impostorWordPool.splice(randomIdx, 1); // Remove to avoid same word twice
+  });
+  
+  eliminatedPlayers = [];
   voteMap={}; voterIndex=0; currentTurn=0; kickedPlayer=null;
   playerOrder = [...players].sort(()=>Math.random()-0.5);
   showPassScreen();
@@ -68,9 +122,12 @@ function showRole() {
   const label = document.getElementById('role-label');
   label.textContent = isImpostor ? 'IMPOSTOR' : 'GRACZ';
   label.className = 'role-label ' + (isImpostor ? 'impostor' : 'gracz');
-  document.getElementById('role-category').textContent = CAT_NAMES[category]||category;
   const wordEl = document.getElementById('role-word');
-  wordEl.textContent = isImpostor ? impostorWord : normalWord;
+  if (isImpostor) {
+    wordEl.textContent = impostorWords[currentTurn];
+  } else {
+    wordEl.textContent = normalWord;
+  }
   wordEl.classList.add('word-hidden');
   wordEl.classList.remove('revealed');
   wordEl.style.cursor = 'pointer';
@@ -92,12 +149,15 @@ function nextTurn() {
 }
 
 function showGameScreen() {
-  document.getElementById('speak-order').innerHTML = playerOrder.map((p,i) =>
+  const activePlayers = players.filter(p => !eliminatedPlayers.includes(p));
+  const activePlayerOrder = playerOrder.filter(p => !eliminatedPlayers.includes(p));
+  
+  document.getElementById('speak-order').innerHTML = activePlayerOrder.map((p,i) =>
     `<div style="padding:8px 0;border-bottom:1px solid #22223a;color:#e8e8ff;font-size:0.95rem">${i+1}. ${p}</div>`
   ).join('');
 
   // Kick list
-  document.getElementById('kick-list').innerHTML = players.map(p =>
+  document.getElementById('kick-list').innerHTML = activePlayers.map(p =>
     `<div class="kick-btn" id="kick-row-${p.replace(/\s/g,'_')}">
       <span>${p}</span>
       <button class="kick-x" onclick="kickPlayer('${p.replace(/'/g,"\\'")}')">WYWAL</button>
@@ -155,20 +215,62 @@ function kickPlayer(name) {
 
 function showKickResults(name) {
   const impostorNames = impostorIndices.map(i => players[i]);
-  const caught = impostorNames.includes(name);
+  const isImpostor = impostorNames.includes(name);
+  const stillActiveImpostors = impostorNames.filter(n => !eliminatedPlayers.includes(n) && n !== name).length;
 
   document.getElementById('result-voted').innerHTML =
     `<div class="result-banner">Wyrzucono ze społeczności:</div><div class="result-big" style="color:#ff4466">${name}</div>`;
   document.getElementById('result-impostors').innerHTML =
-    `<div class="result-banner">Impostor${impostorNames.length>1?'zy':''}:</div><div class="result-big" style="color:#ff4466">${impostorNames.join(', ')}</div>`;
-  document.getElementById('result-words').innerHTML =
-    `<div class="result-banner">Hasło graczy: <strong style="color:#cc88ff">${normalWord}</strong></div>
-     <div class="result-banner" style="margin-top:4px">Hasło impostora: <strong style="color:#ff4466">${impostorWord}</strong></div>`;
+    `<div class="result-banner">Impostorów pozostało: <strong>${stillActiveImpostors}</strong></div>`;
+  document.getElementById('result-words').innerHTML = '';
   document.getElementById('impostor-guess-input').value='';
-  document.getElementById('guess-section').style.display = caught ? 'block' : 'none';
-  document.getElementById('final-verdict').style.display = caught ? 'none' : 'block';
-  if (!caught) document.getElementById('verdict-text').innerHTML =
-    `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Wyrzucono niewinną osobę!</p>`;
+  
+  // Mark player as eliminated
+  eliminatedPlayers.push(name);
+  
+  // Check win conditions
+  const activePlayers = players.filter(p => !eliminatedPlayers.includes(p));
+  const remainingInnocents = activePlayers.length - stillActiveImpostors;
+  
+  if (stillActiveImpostors === 0 && !isImpostor) {
+    // All impostors eliminated - innocents win
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#44ccff">🔵 Gracze wygrywają!</div><p>Wszyscy impostorzy zostali wyeliminowani!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'NOWA GRA';
+    continueBtn.onclick = () => resetGame();
+  } else if (isImpostor) {
+    // Impostor kicked - they get to guess
+    document.getElementById('guess-section').style.display = 'block';
+    document.getElementById('final-verdict').style.display = 'none';
+  } else if (stillActiveImpostors >= remainingInnocents) {
+    // Impostors equal or outnumber innocents - impostors win
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Impostorów jest tyle samo lub więcej niż graczy!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'NOWA GRA';
+    continueBtn.onclick = () => resetGame();
+  } else {
+    // Game continues
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#ffaa44">Gra trwa...</div><p>${name} został wyrzucony!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'WZNÓW DYSKUSJĘ →';
+    continueBtn.onclick = () => showGameScreen();
+  }
+  
   voterIndex=0; voteMap={};
   showScreen('screen-results');
 }
@@ -176,20 +278,23 @@ function showKickResults(name) {
 function goToVote() {
   if (timerInterval) clearInterval(timerInterval);
   voterIndex=0; voteMap={};
-  document.getElementById('vote-buttons').innerHTML = players.map(p =>
+  const activePlayers = players.filter(p => !eliminatedPlayers.includes(p));
+  document.getElementById('vote-buttons').innerHTML = activePlayers.map(p =>
     `<button class="vote-btn" onclick="castVote('${p.replace(/'/g,"\\'")}')">
       <span>${p}</span><span class="votes" id="vote-${p.replace(/\s/g,'_')}">0</span>
     </button>`
   ).join('');
+  // Store active player count for vote limit
+  window.activePlayerCount = activePlayers.length;
   showScreen('screen-vote');
 }
 
 function castVote(target) {
-  if (voterIndex >= players.length) return;
+  if (voterIndex >= window.activePlayerCount) return;
   voteMap[target] = (voteMap[target]||0)+1;
   document.getElementById('vote-'+target.replace(/\s/g,'_')).textContent = voteMap[target];
   voterIndex++;
-  if (voterIndex >= players.length) document.querySelectorAll('.vote-btn').forEach(b=>b.disabled=true);
+  if (voterIndex >= window.activePlayerCount) document.querySelectorAll('.vote-btn').forEach(b=>b.disabled=true);
 }
 
 function showResults() {
@@ -198,20 +303,103 @@ function showResults() {
     if (v>maxVotes){maxVotes=v;votedOut=[p];}
     else if(v===maxVotes) votedOut.push(p);
   }
+  
+  // Check for tie
+  if (votedOut.length > 1) {
+    document.getElementById('result-voted').innerHTML =
+      `<div class="result-banner">Remis!</div><div class="result-big" style="color:#ffaa44">Nikt nie został wyrzucony</div>`;
+    document.getElementById('result-impostors').innerHTML =
+      `<div class="result-banner">Głosy:</div>`;
+    document.getElementById('result-words').innerHTML = '';
+    
+    // Show vote breakdown
+    let voteBreakdown = '';
+    for (const [p,v] of Object.entries(voteMap)) {
+      voteBreakdown += `<div style="padding:8px 0;border-bottom:1px solid #22223a">${p}: <strong>${v}</strong></div>`;
+    }
+    document.getElementById('result-impostors').innerHTML += voteBreakdown;
+    
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'none';
+    
+    // Change button to continue discussion
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'WZNÓW DYSKUSJĘ →';
+    continueBtn.onclick = () => showGameScreen();
+    
+    voterIndex=0; voteMap={};
+    showScreen('screen-results');
+    return;
+  }
+  
   const impostorNames = impostorIndices.map(i=>players[i]);
-  const caught = votedOut.length===1 && impostorNames.includes(votedOut[0]);
+  
   document.getElementById('result-voted').innerHTML =
     `<div class="result-banner">Wyrzucono ze społeczności:</div><div class="result-big" style="color:#ff4466">${votedOut.join(', ')}</div>`;
   document.getElementById('result-impostors').innerHTML =
-    `<div class="result-banner">Impostor${impostorNames.length>1?'zy':''}:</div><div class="result-big" style="color:#ff4466">${impostorNames.join(', ')}</div>`;
-  document.getElementById('result-words').innerHTML =
-    `<div class="result-banner">Hasło graczy: <strong style="color:#cc88ff">${normalWord}</strong></div>
-     <div class="result-banner" style="margin-top:4px">Hasło impostora: <strong style="color:#ff4466">${impostorWord}</strong></div>`;
+    `<div class="result-banner">Impostorów pozostało: <strong>${0}</strong></div>`;
+  document.getElementById('result-words').innerHTML = '';
   document.getElementById('impostor-guess-input').value='';
-  document.getElementById('guess-section').style.display = caught ? 'block' : 'none';
-  document.getElementById('final-verdict').style.display = caught ? 'none' : 'block';
-  if (!caught) document.getElementById('verdict-text').innerHTML =
-    `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Graczom nie udało się wykryć impostora.</p>`;
+  
+  // Remove voted out player(s) from the game
+  votedOut.forEach(name => {
+    if (!eliminatedPlayers.includes(name)) {
+      eliminatedPlayers.push(name);
+    }
+  });
+  
+  // Check win conditions
+  const stillActiveImpostors = impostorNames.filter(n => !eliminatedPlayers.includes(n)).length;
+  const activePlayers = players.filter(p => !eliminatedPlayers.includes(p));
+  const remainingInnocents = activePlayers.length - stillActiveImpostors;
+  
+  // Update impostor count display
+  document.getElementById('result-impostors').innerHTML =
+    `<div class="result-banner">Impostorów pozostało: <strong>${stillActiveImpostors}</strong></div>`;
+  
+  // Check if an impostor was voted out
+  const votedOutImpostor = votedOut.find(name => impostorNames.includes(name));
+  
+  if (stillActiveImpostors === 0 && !votedOutImpostor) {
+    // All impostors eliminated - innocents win
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#44ccff">🔵 Gracze wygrywają!</div><p>Wszyscy impostorzy zostali wyeliminowani!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'NOWA GRA';
+    continueBtn.onclick = () => resetGame();
+  } else if (votedOutImpostor) {
+    // Impostor voted out - they get to guess
+    document.getElementById('guess-section').style.display = 'block';
+    document.getElementById('final-verdict').style.display = 'none';
+  } else if (stillActiveImpostors >= remainingInnocents) {
+    // Impostors equal or outnumber innocents - impostors win
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Impostorów jest tyle samo lub więcej niż graczy!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'NOWA GRA';
+    continueBtn.onclick = () => resetGame();
+  } else {
+    // Game continues
+    document.getElementById('guess-section').style.display = 'none';
+    document.getElementById('final-verdict').style.display = 'block';
+    document.getElementById('verdict-text').innerHTML =
+      `<div class="result-big" style="color:#ffaa44">Gra trwa...</div><p>${votedOut.join(', ')} został wyrzucony!</p>`;
+    
+    const resultsScreen = document.getElementById('screen-results');
+    const continueBtn = resultsScreen.querySelector('.btn-secondary');
+    continueBtn.textContent = 'WZNÓW DYSKUSJĘ →';
+    continueBtn.onclick = () => showGameScreen();
+  }
+  
   voterIndex=0; voteMap={};
   showScreen('screen-results');
 }
@@ -228,11 +416,11 @@ function checkGuess() {
 }
 
 function resetGame() {
-  players=[]; impostorIndices=[]; normalWord=''; impostorWord=''; currentTurn=0; voterIndex=0; voteMap={}; kickedPlayer=null;
+  impostorIndices=[]; normalWord=''; impostorWords={}; currentTurn=0; voterIndex=0; voteMap={}; kickedPlayer=null; eliminatedPlayers=[];
   if(timerInterval) clearInterval(timerInterval);
-  document.getElementById('players-list').innerHTML='';
   document.getElementById('guess-section').style.display='none';
   document.getElementById('final-verdict').style.display='none';
+  renderPlayers();
   showScreen('screen-setup');
 }
 

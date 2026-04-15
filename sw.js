@@ -1,5 +1,5 @@
-const CACHE = 'impostor-v1';
-const FILES = ['/', '/index.html', '/manifest.json'];
+const CACHE = 'impostor-v2';
+const FILES = ['/', '/index.html', '/style.css', '/script.js', '/manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
