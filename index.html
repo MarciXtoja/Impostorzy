@@ -1,394 +1,151 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Impostor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Impostor</title>
 
-<!-- PWA -->
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#0d0d1a" />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d0d1a" />
 
-<!-- iOS PWA -->
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Impostor" />
-<link rel="apple-touch-icon" href="icon-192.png" />
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Impostor" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
 
-<style>
-  
-</style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- SETUP -->
-<div class="screen active" id="screen-setup">
-  <h1>🕵️ Impostor</h1>
-  <p style="margin-bottom:24px">Gra towarzyska na hasła</p>
-  <div class="card">
-    <label>Dodaj graczy (min. 3)</label>
-    <div style="display:flex;gap:8px;margin-bottom:8px">
-      <input type="text" id="player-input" placeholder="Imię gracza..." style="margin:0;flex:1" autocomplete="off" />
-      <button class="btn btn-primary" style="width:auto;padding:10px 16px;margin:0" onclick="addPlayer()">+</button>
-    </div>
-    <div class="players-list" id="players-list"></div>
-    <label>Kategoria</label>
-    <select id="category-select">
-      <option value="random">🎲 Losowa</option>
-      <option value="jedzenie">🍕 Jedzenie</option>
-      <option value="zwierzeta">🐾 Zwierzęta</option>
-      <option value="miejsca">🌍 Miejsca</option>
-      <option value="sport">⚽ Sport</option>
-      <option value="filmy">🎬 Filmy i seriale</option>
-      <option value="przedmioty">📦 Przedmioty</option>
-    </select>
-    <label>Liczba impostorów</label>
-    <input type="number" id="impostor-count" value="1" min="1" max="2" />
-
-    <label>Czas dyskusji</label>
-    <div class="time-select" id="time-select">
-      <div class="time-opt" onclick="selectTime(1)">1 min</div>
-      <div class="time-opt" onclick="selectTime(2)">2 min</div>
-      <div class="time-opt selected" onclick="selectTime(5)">5 min</div>
-      <div class="time-opt" onclick="selectTime(10)">10 min</div>
-    </div>
-  </div>
-  <button class="btn btn-primary" onclick="startGame()">ZAGRAJ</button>
-</div>
-
-<!-- PASS -->
-<div class="screen" id="screen-pass">
-  <div class="turn-count" id="pass-count"></div>
-  <div class="card" style="text-align:center">
-    <p>Przekaż telefon do</p>
-    <p style="font-size:1.5rem;font-weight:800;color:#fff;margin:10px 0" id="pass-to"></p>
-    <p style="font-size:0.85rem">Nikomu nie pokazuj swojego hasła!</p>
-  </div>
-  <button class="btn btn-primary" onclick="showRole()">GOTOWE</button>
-</div>
-
-<!-- ROLE -->
-<div class="screen" id="screen-role">
-  <div class="big-role" id="role-emoji"></div>
-  <div class="role-label" id="role-label"></div>
-  <div class="category-badge" id="role-category"></div>
-  <div class="word-box word-hidden" id="role-word" onclick="revealWord(this)">Dotknij aby zobaczyć</div>
-  <p style="font-size:0.8rem;margin-bottom:20px;padding:0 16px" id="role-hint"></p>
-  <button class="btn btn-primary" onclick="nextTurn()">DALEJ →</button>
-</div>
-
-<!-- GAME -->
-<div class="screen" id="screen-game">
-  <h1>💬 Dyskusja</h1>
-  <p style="margin-bottom:20px">Każdy opisuje hasło jednym zdaniem. Wywal impostora!</p>
-
-  <div class="timer-circle">
-    <svg width="160" height="160" viewBox="0 0 160 160">
-      <circle class="timer-track" cx="80" cy="80" r="70"/>
-      <circle class="timer-arc" id="timer-arc" cx="80" cy="80" r="70"/>
-    </svg>
-    <div class="timer-text">
-      <div class="timer-digits" id="timer-digits">5:00</div>
-      <div class="timer-label">pozostało</div>
-    </div>
-  </div>
-
-  <div style="width:100%;max-width:420px;margin-bottom:12px">
-    <label style="margin-bottom:8px">Wywal impostora już teraz:</label>
-    <div id="kick-list"></div>
-  </div>
-
-  <div class="card" style="text-align:left">
-    <label>Kolejność wypowiedzi:</label>
-    <div id="speak-order"></div>
-  </div>
-
-  <button class="btn btn-primary" onclick="goToVote()">GŁOSOWANIE →</button>
-</div>
-
-<!-- VOTE -->
-<div class="screen" id="screen-vote">
-  <h1>🗳️ Głosowanie</h1>
-  <p style="margin-bottom:20px">Kto jest impostorem? Każdy głosuje po kolei!</p>
-  <div id="vote-buttons"></div>
-  <hr class="divider"/>
-  <button class="btn btn-primary" onclick="showResults()">POKAŻ WYNIKI</button>
-</div>
-
-<!-- RESULTS -->
-<div class="screen" id="screen-results">
-  <h1>📊 Wyniki</h1>
-  <div class="card" style="text-align:center;max-width:420px">
-    <div id="result-voted"></div>
-    <hr class="divider"/>
-    <div id="result-impostors"></div>
-    <hr class="divider"/>
-    <div id="result-words"></div>
-  </div>
-  <div id="guess-section" style="display:none;width:100%;max-width:420px">
+  <!-- SETUP -->
+  <div class="screen active" id="screen-setup">
+    <h1>🕵️ Impostor</h1>
+    <p style="margin-bottom:24px">Gra towarzyska na hasła</p>
     <div class="card">
-      <label>🕵️ Impostor zgaduje hasło!</label>
-      <p style="margin-bottom:12px;font-size:0.9rem">Impostor może wygrać jeśli zgadnie prawdziwe hasło graczy.</p>
-      <input type="text" id="impostor-guess-input" placeholder="Wpisz hasło..." autocomplete="off" />
-      <button class="btn btn-primary" onclick="checkGuess()">SPRAWDŹ</button>
+      <label>Dodaj graczy (min. 3)</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input type="text" id="player-input" placeholder="Imię gracza..." style="margin:0;flex:1" autocomplete="off" />
+        <button class="btn btn-primary" style="width:auto;padding:10px 16px;margin:0" onclick="addPlayer()">+</button>
+      </div>
+
+      <div class="players-list" id="players-list"></div>
+
+      <label>Kategoria</label>
+      <select id="category-select">
+        <option value="random">🎲 Losowa</option>
+        <option value="jedzenie">🍕 Jedzenie</option>
+        <option value="zwierzeta">🐾 Zwierzęta</option>
+        <option value="miejsca">🌍 Miejsca</option>
+        <option value="sport">⚽ Sport</option>
+        <option value="filmy">🎬 Filmy i seriale</option>
+        <option value="przedmioty">📦 Przedmioty</option>
+      </select>
+
+      <label>Liczba impostorów</label>
+      <input type="number" id="impostor-count" value="1" min="1" max="2" />
+
+      <label>Czas dyskusji</label>
+      <div class="time-select" id="time-select">
+        <div class="time-opt" onclick="selectTime(1)">1 min</div>
+        <div class="time-opt" onclick="selectTime(2)">2 min</div>
+        <div class="time-opt selected" onclick="selectTime(5)">5 min</div>
+        <div class="time-opt" onclick="selectTime(10)">10 min</div>
+      </div>
     </div>
+
+    <button class="btn btn-primary" onclick="startGame()">ZAGRAJ</button>
   </div>
-  <div id="final-verdict" style="display:none;width:100%;max-width:420px;text-align:center;margin-bottom:16px">
-    <div class="card"><div id="verdict-text"></div></div>
+
+  <!-- PASS -->
+  <div class="screen" id="screen-pass">
+    <div class="turn-count" id="pass-count"></div>
+
+    <div class="card" style="text-align:center">
+      <p>Przekaż telefon do</p>
+      <p style="font-size:1.5rem;font-weight:800;color:#fff;margin:10px 0" id="pass-to"></p>
+      <p style="font-size:0.85rem">Nikomu nie pokazuj swojego hasła!</p>
+    </div>
+
+    <button class="btn btn-primary" onclick="showRole()">GOTOWE</button>
   </div>
-  <button class="btn btn-secondary" onclick="resetGame()">NOWA GRA</button>
-</div>
 
-<script>
-const WORDS = {
-  jedzenie: [['Pizza','Hamburger'],['Lody','Sorbet'],['Sushi','Pierogi'],['Kawa','Herbata'],['Czekolada','Karmel'],['Banan','Mango'],['Frytki','Chipsy'],['Zapiekanka','Hot dog']],
-  zwierzeta: [['Pies','Wilk'],['Kot','Ryś'],['Słoń','Nosorożec'],['Żyrafa','Wielbłąd'],['Pingwin','Puffin'],['Delfin','Morświn'],['Orzeł','Sokół'],['Królik','Zając']],
-  miejsca: [['Plaża','Wydma'],['Zamek','Pałac'],['Las','Dżungla'],['Góry','Wulkan'],['Biblioteka','Archiwum'],['Stadion','Arena'],['Lotnisko','Dworzec'],['Rynek','Plac']],
-  sport: [['Piłka nożna','Rugby'],['Koszykówka','Siatkówka'],['Tenis','Badminton'],['Pływanie','Nurkowanie'],['Narciarstwo','Snowboard'],['Boks','Karate'],['Golf','Krykiet'],['Kolarstwo','Triathlon']],
-  filmy: [['Titanic','Rejs'],['Matrix','Inception'],['Avatar','Dune'],['Harry Potter','Percy Jackson'],['Shrek','Kung Fu Panda'],['Star Wars','Star Trek'],['Hobbit','Eragon'],['Interstellar','Gravity']],
-  przedmioty: [['Telefon','Tablet'],['Samochód','Motocykl'],['Gitara','Skrzypce'],['Zegarek','Kompas'],['Lampa','Świecznik'],['Klucz','Śrubokręt'],['Parasol','Płaszcz'],['Piłka','Balon']]
-};
-const CATEGORIES = Object.keys(WORDS);
-const CAT_NAMES = {jedzenie:'🍕 Jedzenie',zwierzeta:'🐾 Zwierzęta',miejsca:'🌍 Miejsca',sport:'⚽ Sport',filmy:'🎬 Filmy',przedmioty:'📦 Przedmioty'};
+  <!-- ROLE -->
+  <div class="screen" id="screen-role">
+    <div class="big-role" id="role-emoji"></div>
+    <div class="role-label" id="role-label"></div>
+    <div class="category-badge" id="role-category"></div>
+    <div class="word-box word-hidden" id="role-word" onclick="revealWord(this)">Dotknij aby zobaczyć</div>
+    <p style="font-size:0.8rem;margin-bottom:20px;padding:0 16px" id="role-hint"></p>
+    <button class="btn btn-primary" onclick="nextTurn()">DALEJ →</button>
+  </div>
 
-let players=[], impostorIndices=[], normalWord='', impostorWord='', category='';
-let currentTurn=0, playerOrder=[], voteMap={}, voterIndex=0, timerInterval=null;
-let selectedMinutes=5, kickedPlayer=null;
+  <!-- GAME -->
+  <div class="screen" id="screen-game">
+    <h1>💬 Dyskusja</h1>
+    <p style="margin-bottom:20px">Każdy opisuje hasło jednym zdaniem. Wywal impostora!</p>
 
-function selectTime(min) {
-  selectedMinutes = min;
-  document.querySelectorAll('.time-opt').forEach(el => {
-    el.classList.toggle('selected', parseInt(el.textContent) === min);
-  });
-}
+    <div class="timer-circle">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle class="timer-track" cx="80" cy="80" r="70"/>
+        <circle class="timer-arc" id="timer-arc" cx="80" cy="80" r="70"/>
+      </svg>
 
-function addPlayer() {
-  const input = document.getElementById('player-input');
-  const name = input.value.trim();
-  if (!name || players.includes(name)) return;
-  players.push(name);
-  input.value = '';
-  renderPlayers();
-  input.focus();
-}
-document.getElementById('player-input').addEventListener('keydown', e => { if(e.key==='Enter') addPlayer(); });
+      <div class="timer-text">
+        <div class="timer-digits" id="timer-digits">5:00</div>
+        <div class="timer-label">pozostało</div>
+      </div>
+    </div>
 
-function renderPlayers() {
-  document.getElementById('players-list').innerHTML = players.map((p,i) =>
-    `<div class="player-tag">${p} <span class="remove" onclick="removePlayer(${i})">✕</span></div>`
-  ).join('');
-}
-function removePlayer(i) { players.splice(i,1); renderPlayers(); }
+    <div style="width:100%;max-width:420px;margin-bottom:12px">
+      <label style="margin-bottom:8px">Wywal impostora już teraz:</label>
+      <div id="kick-list"></div>
+    </div>
 
-function startGame() {
-  if (players.length < 3) { alert('Dodaj co najmniej 3 graczy!'); return; }
-  const impostorCount = Math.min(parseInt(document.getElementById('impostor-count').value)||1, Math.floor(players.length/2));
-  let cat = document.getElementById('category-select').value;
-  if (cat==='random') cat = CATEGORIES[Math.floor(Math.random()*CATEGORIES.length)];
-  category = cat;
-  const pair = WORDS[cat][Math.floor(Math.random()*WORDS[cat].length)];
-  const flip = Math.random()<0.5;
-  normalWord = flip ? pair[0] : pair[1];
-  impostorWord = flip ? pair[1] : pair[0];
-  const shuffled = players.map((_,i)=>i).sort(()=>Math.random()-0.5);
-  impostorIndices = shuffled.slice(0, impostorCount);
-  voteMap={}; voterIndex=0; currentTurn=0; kickedPlayer=null;
-  playerOrder = [...players].sort(()=>Math.random()-0.5);
-  showPassScreen();
-}
+    <div class="card" style="text-align:left">
+      <label>Kolejność wypowiedzi:</label>
+      <div id="speak-order"></div>
+    </div>
 
-function showPassScreen() {
-  if (currentTurn >= players.length) { showGameScreen(); return; }
-  document.getElementById('pass-count').textContent = `Gracz ${currentTurn+1} z ${players.length}`;
-  document.getElementById('pass-to').textContent = players[currentTurn];
-  showScreen('screen-pass');
-}
+    <button class="btn btn-primary" onclick="goToVote()">GŁOSOWANIE →</button>
+  </div>
 
-function showRole() {
-  const isImpostor = impostorIndices.includes(currentTurn);
-  document.getElementById('role-emoji').textContent = isImpostor ? '🔴' : '🔵';
-  const label = document.getElementById('role-label');
-  label.textContent = isImpostor ? 'IMPOSTOR' : 'GRACZ';
-  label.className = 'role-label ' + (isImpostor ? 'impostor' : 'gracz');
-  document.getElementById('role-category').textContent = CAT_NAMES[category]||category;
-  const wordEl = document.getElementById('role-word');
-  wordEl.textContent = isImpostor ? impostorWord : normalWord;
-  wordEl.classList.add('word-hidden');
-  wordEl.classList.remove('revealed');
-  wordEl.style.cursor = 'pointer';
-  document.getElementById('role-hint').textContent = isImpostor
-    ? '🕵️ Jesteś impostorem! Ukryj się. Możesz zgadnąć prawdziwe hasło po głosowaniu.'
-    : '✅ Pamiętaj swoje hasło i opisz je tak, żeby impostor nie zgadł!';
-  showScreen('screen-role');
-}
+  <!-- VOTE -->
+  <div class="screen" id="screen-vote">
+    <h1>🗳️ Głosowanie</h1>
+    <p style="margin-bottom:20px">Kto jest impostorem? Każdy głosuje po kolei!</p>
+    <div id="vote-buttons"></div>
+    <hr class="divider"/>
+    <button class="btn btn-primary" onclick="showResults()">POKAŻ WYNIKI</button>
+  </div>
 
-function revealWord(el) {
-  el.classList.toggle('revealed');
-  el.classList.toggle('word-hidden');
-  if (el.classList.contains('revealed')) el.style.cursor='default';
-}
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <h1>📊 Wyniki</h1>
+    <div class="card" style="text-align:center;max-width:420px">
+      <div id="result-voted"></div>
+      <hr class="divider"/>
+      <div id="result-impostors"></div>
+      <hr class="divider"/>
+      <div id="result-words"></div>
+    </div>
 
-function nextTurn() {
-  currentTurn++;
-  currentTurn < players.length ? showPassScreen() : showGameScreen();
-}
+    <div id="guess-section" style="display:none;width:100%;max-width:420px">
+      <div class="card">
+        <label>🕵️ Impostor zgaduje hasło!</label>
+        <p style="margin-bottom:12px;font-size:0.9rem">Impostor może wygrać jeśli zgadnie prawdziwe hasło graczy.</p>
+        <input type="text" id="impostor-guess-input" placeholder="Wpisz hasło..." autocomplete="off" />
+        <button class="btn btn-primary" onclick="checkGuess()">SPRAWDŹ</button>
+      </div>
+    </div>
+    
+    <div id="final-verdict" style="display:none;width:100%;max-width:420px;text-align:center;margin-bottom:16px">
+      <div class="card"><div id="verdict-text"></div></div>
+    </div>
 
-function showGameScreen() {
-  document.getElementById('speak-order').innerHTML = playerOrder.map((p,i) =>
-    `<div style="padding:8px 0;border-bottom:1px solid #22223a;color:#e8e8ff;font-size:0.95rem">${i+1}. ${p}</div>`
-  ).join('');
+    <button class="btn btn-secondary" onclick="resetGame()">NOWA GRA</button>
+  </div>
 
-  // Kick list
-  document.getElementById('kick-list').innerHTML = players.map(p =>
-    `<div class="kick-btn" id="kick-row-${p.replace(/\s/g,'_')}">
-      <span>${p}</span>
-      <button class="kick-x" onclick="kickPlayer('${p.replace(/'/g,"\\'")}')">WYWAL</button>
-    </div>`
-  ).join('');
-
-  // Timer
-  const totalSec = selectedMinutes * 60;
-  let remaining = totalSec;
-  const circumference = 2 * Math.PI * 70;
-  const arc = document.getElementById('timer-arc');
-  arc.style.strokeDasharray = circumference;
-  arc.classList.remove('urgent');
-
-  function updateTimer() {
-    const frac = remaining / totalSec;
-    arc.style.strokeDashoffset = circumference * (1 - frac);
-    const m = Math.floor(remaining / 60);
-    const s = remaining % 60;
-    const digits = document.getElementById('timer-digits');
-    digits.textContent = m + ':' + String(s).padStart(2,'0');
-    if (remaining <= 30) {
-      arc.classList.add('urgent');
-      digits.classList.add('urgent');
-    }
-    if (remaining <= 0) {
-      clearInterval(timerInterval);
-      document.getElementById('timer-digits').textContent = '0:00';
-      goToVote();
-    }
-    remaining--;
-  }
-
-  if (timerInterval) clearInterval(timerInterval);
-  updateTimer();
-  timerInterval = setInterval(updateTimer, 1000);
-
-  showScreen('screen-game');
-}
-
-function kickPlayer(name) {
-  if (timerInterval) clearInterval(timerInterval);
-  kickedPlayer = name;
-  const safeId = name.replace(/\s/g,'_');
-  document.querySelectorAll('.kick-btn').forEach(b => b.classList.add('kicked'));
-  document.getElementById('kick-row-'+safeId).style.borderColor = '#ff4466';
-  document.getElementById('kick-row-'+safeId).style.opacity = '1';
-  document.getElementById('kick-row-'+safeId).querySelector('.kick-x').textContent = 'WYWALONY';
-
-  // Auto-go to results after 1.5s
-  setTimeout(() => {
-    showKickResults(name);
-  }, 1500);
-}
-
-function showKickResults(name) {
-  const impostorNames = impostorIndices.map(i => players[i]);
-  const caught = impostorNames.includes(name);
-
-  document.getElementById('result-voted').innerHTML =
-    `<div class="result-banner">Wyrzucono ze społeczności:</div><div class="result-big" style="color:#ff4466">${name}</div>`;
-  document.getElementById('result-impostors').innerHTML =
-    `<div class="result-banner">Impostor${impostorNames.length>1?'zy':''}:</div><div class="result-big" style="color:#ff4466">${impostorNames.join(', ')}</div>`;
-  document.getElementById('result-words').innerHTML =
-    `<div class="result-banner">Hasło graczy: <strong style="color:#cc88ff">${normalWord}</strong></div>
-     <div class="result-banner" style="margin-top:4px">Hasło impostora: <strong style="color:#ff4466">${impostorWord}</strong></div>`;
-  document.getElementById('impostor-guess-input').value='';
-  document.getElementById('guess-section').style.display = caught ? 'block' : 'none';
-  document.getElementById('final-verdict').style.display = caught ? 'none' : 'block';
-  if (!caught) document.getElementById('verdict-text').innerHTML =
-    `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Wyrzucono niewinną osobę!</p>`;
-  voterIndex=0; voteMap={};
-  showScreen('screen-results');
-}
-
-function goToVote() {
-  if (timerInterval) clearInterval(timerInterval);
-  voterIndex=0; voteMap={};
-  document.getElementById('vote-buttons').innerHTML = players.map(p =>
-    `<button class="vote-btn" onclick="castVote('${p.replace(/'/g,"\\'")}')">
-      <span>${p}</span><span class="votes" id="vote-${p.replace(/\s/g,'_')}">0</span>
-    </button>`
-  ).join('');
-  showScreen('screen-vote');
-}
-
-function castVote(target) {
-  if (voterIndex >= players.length) return;
-  voteMap[target] = (voteMap[target]||0)+1;
-  document.getElementById('vote-'+target.replace(/\s/g,'_')).textContent = voteMap[target];
-  voterIndex++;
-  if (voterIndex >= players.length) document.querySelectorAll('.vote-btn').forEach(b=>b.disabled=true);
-}
-
-function showResults() {
-  let maxVotes=0, votedOut=[];
-  for (const [p,v] of Object.entries(voteMap)) {
-    if (v>maxVotes){maxVotes=v;votedOut=[p];}
-    else if(v===maxVotes) votedOut.push(p);
-  }
-  const impostorNames = impostorIndices.map(i=>players[i]);
-  const caught = votedOut.length===1 && impostorNames.includes(votedOut[0]);
-  document.getElementById('result-voted').innerHTML =
-    `<div class="result-banner">Wyrzucono ze społeczności:</div><div class="result-big" style="color:#ff4466">${votedOut.join(', ')}</div>`;
-  document.getElementById('result-impostors').innerHTML =
-    `<div class="result-banner">Impostor${impostorNames.length>1?'zy':''}:</div><div class="result-big" style="color:#ff4466">${impostorNames.join(', ')}</div>`;
-  document.getElementById('result-words').innerHTML =
-    `<div class="result-banner">Hasło graczy: <strong style="color:#cc88ff">${normalWord}</strong></div>
-     <div class="result-banner" style="margin-top:4px">Hasło impostora: <strong style="color:#ff4466">${impostorWord}</strong></div>`;
-  document.getElementById('impostor-guess-input').value='';
-  document.getElementById('guess-section').style.display = caught ? 'block' : 'none';
-  document.getElementById('final-verdict').style.display = caught ? 'none' : 'block';
-  if (!caught) document.getElementById('verdict-text').innerHTML =
-    `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Graczom nie udało się wykryć impostora.</p>`;
-  voterIndex=0; voteMap={};
-  showScreen('screen-results');
-}
-
-function checkGuess() {
-  const guess = document.getElementById('impostor-guess-input').value.trim().toLowerCase();
-  const correct = normalWord.toLowerCase();
-  const win = guess===correct || correct.includes(guess) || guess.includes(correct);
-  document.getElementById('guess-section').style.display='none';
-  document.getElementById('final-verdict').style.display='block';
-  document.getElementById('verdict-text').innerHTML = win
-    ? `<div class="result-big" style="color:#ff4466">🔴 Impostor wygrywa!</div><p>Złapany, ale zgadł hasło: <strong>${normalWord}</strong>!</p>`
-    : `<div class="result-big" style="color:#44ccff">🔵 Gracze wygrywają!</div><p>Impostor nie zgadł. Hasło to: <strong style="color:#cc88ff">${normalWord}</strong></p>`;
-}
-
-function resetGame() {
-  players=[]; impostorIndices=[]; normalWord=''; impostorWord=''; currentTurn=0; voterIndex=0; voteMap={}; kickedPlayer=null;
-  if(timerInterval) clearInterval(timerInterval);
-  document.getElementById('players-list').innerHTML='';
-  document.getElementById('guess-section').style.display='none';
-  document.getElementById('final-verdict').style.display='none';
-  showScreen('screen-setup');
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// Rejestracja Service Workera
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
-  });
-}
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
