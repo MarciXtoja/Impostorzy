@@ -243,22 +243,6 @@ input:focus, select:focus {
 
 
 
-
-/* ======================================================== Kategorie ======================================================== */
-.category-badge { 
-    background: #1a1a2e; 
-    border: 1px solid #555577; 
-    border-radius: 20px; 
-    padding: 4px 14px; 
-    font-size: 0.8rem; 
-    color: #aaaacc; 
-    margin-bottom: 16px; 
-    display: inline-block; 
-}
-
-
-
-
 /* ======================================================== Kolejka ======================================================== */
 .turn-count { 
     font-size: 0.85rem; 

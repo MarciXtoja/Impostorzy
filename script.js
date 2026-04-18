@@ -51,7 +51,7 @@ const WORDS = {
   ]
 };
 
-let players=[], impostorIndices=[], normalWord='', impostorWords={}, category='';
+let players=[], impostorIndices=[], normalWord='', impostorWords={};
 let currentTurn=0, playerOrder=[], voteMap={}, voterIndex=0, timerInterval=null;
 let selectedMinutes=5, kickedPlayer=null, eliminatedPlayers=[];
 
