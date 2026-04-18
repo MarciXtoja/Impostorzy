@@ -376,6 +376,24 @@ function showResults() {
     // Impostor voted out - they get to guess
     document.getElementById('guess-section').style.display = 'block';
     document.getElementById('final-verdict').style.display = 'none';
+    const resultsScreen2 = document.getElementById('screen-results');
+    const continueBtn2 = resultsScreen2.querySelector('.btn-secondary');
+    continueBtn2.textContent = 'NIE ZNAM HASŁA';
+    continueBtn2.onclick = () => {
+      document.getElementById('guess-section').style.display = 'none';
+      document.getElementById('final-verdict').style.display = 'block';
+      if (stillActiveImpostors > 0) {
+        document.getElementById('verdict-text').innerHTML =
+          `<div class="result-big" style="color:#ffaa44">Gra trwa...</div><p>${votedOutImpostor} został wyrzucony!</p>`;
+        continueBtn2.textContent = 'WZNÓW DYSKUSJĘ →';
+        continueBtn2.onclick = () => showGameScreen();
+      } else {
+        document.getElementById('verdict-text').innerHTML =
+          `<div class="result-big" style="color:#44ccff">🔵 Gracze wygrywają!</div><p>Wszyscy impostorzy zostali wyeliminowani!</p>`;
+        continueBtn2.textContent = 'NOWA GRA';
+        continueBtn2.onclick = () => resetGame();
+      }
+    };
   } else if (stillActiveImpostors >= remainingInnocents) {
     // Impostors equal or outnumber innocents - impostors win
     document.getElementById('guess-section').style.display = 'none';
@@ -406,6 +424,7 @@ function showResults() {
 
 function checkGuess() {
   const guess = document.getElementById('impostor-guess-input').value.trim().toLowerCase();
+  if (!guess) return;
   const correct = normalWord.toLowerCase();
   const win = guess===correct || correct.includes(guess) || guess.includes(correct);
   document.getElementById('guess-section').style.display='none';
